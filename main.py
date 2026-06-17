@@ -20,5 +20,13 @@ g1 = pxl1[2]
 new_pxl_r1 = (r1 & 254) | 0
 new_pxl_b1 = (b1 & 254) | 1
 new_pxl_g1 = (g1 & 254) | 0
+
+r2 = pxl2[0]
+b2 = pxl2[1]
+g2 = pxl2[2]
+
+new_pxl_r2 = (r2 & 254) | 1
+new_pxl_b2 = (b2 & 254) | 1
+new_pxl_g2 = (g2 & 254) | 0
 # print(r,bin(r))
 # print(new_pxl,bin(new_pxl))
