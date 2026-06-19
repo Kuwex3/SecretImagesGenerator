@@ -4,46 +4,53 @@ file = Image.open("image.png").convert("RGB")
 
 pxls = file.load()
 
-pxl1 = pxls[530, 502]
-pxl2 = pxls[531, 502]
-pxl3 = pxls[532, 502]
-
-
-def code():
-    print(pxl1)
-
-    secret_letter = ord("X")
-    print(secret_letter)
-    bits_of_secret = format(secret_letter, "08b")
-    print(bits_of_secret)
-
-    r1 = pxl1[0]
-    g1 = pxl1[1]
-    b1 = pxl1[2]
-
-    new_pxl_r1 = (r1 & 254) | 0
-    new_pxl_g1 = (g1 & 254) | 1
-    new_pxl_b1 = (b1 & 254) | 0
-
-    r2 = pxl2[0]
-    g2 = pxl2[1]
-    b2 = pxl2[2]
-
-    new_pxl_r2 = (r2 & 254) | 1
-    new_pxl_g2 = (g2 & 254) | 1
-    new_pxl_b2 = (b2 & 254) | 0
-
-    r3 = pxl3[0]
-    g3 = pxl3[1]
-    b3 = pxl3[2]
-
-    new_pxl_r3 = (r3 & 254) | 0
-    new_pxl_g3 = (g3 & 254) | 0
-
-    pxls[530, 502] = (new_pxl_r1, new_pxl_g1, new_pxl_b1)
-    pxls[531, 502] = (new_pxl_r2, new_pxl_g2, new_pxl_b2)
-    pxls[532, 502] = (new_pxl_r3, new_pxl_g3, b3)
-
-    file.save("new_image.png", "PNG")
+def make_bin(word):
+    bin_word = ""
+    for i in word:
+        num = ord(i)
+        bits = format(num, "08b")
+        bin_word += bits
+    sharp_code = ord("#")
+    bits_of_sharp = format(sharp_code, "08b")
+    for i in range(0, 3):
+        bin_word += bits_of_sharp
+    return bin_word
     
-code()
+def code_word(bin_word):
+    height = file.height
+    width = file.width
+    
+    bit_index = 0
+    is_done = False
+    bit_len = len(bin_word)
+    
+    for x in range(width):
+        if is_done:
+            break
+        else:
+            for y in range(height):
+                r, g ,b = pxls[x, y]
+                if bit_index < bit_len:
+                    r = (r & 254) | int(bin_word[bit_index])
+                    bit_index += 1
+                else:
+                    is_done = True
+                if bit_index < bit_len:
+                    g = (g & 254) | int(bin_word[bit_index])
+                    bit_index += 1
+                else:
+                    is_done = True
+                if bit_index < bit_len:
+                    b = (b & 254) | int(bin_word[bit_index])
+                    bit_index += 1
+                else:
+                    is_done = True
+                pxls[x, y] = (r, g, b)
+                if is_done:
+                    is_done = True
+    file.save("new_img.png", "PNG")
+    
+    
+word_for_code = str(input("Enter a word which you would like to code in image:"))
+bits_of_word = make_bin(word_for_code)
+code_word(bits_of_word)

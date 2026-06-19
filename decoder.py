@@ -1,22 +1,42 @@
 from PIL import Image
 
-file = Image.open("new_image.png").convert("RGB")
+file = Image.open("new_img.png").convert("RGB")
 
 pxls = file.load()
 
-pxl1 = pxls[530, 502]
-pxl2 = pxls[531, 502]
-pxl3 = pxls[532, 502]
-
 def decode():
-    bit1 = str(pxl1[0] & 1)
-    bit2 = str(pxl1[1] & 1)
-    bit3 = str(pxl1[2] & 1)
-    bit4 = str(pxl2[0] & 1)
-    bit5 = str(pxl2[1] & 1)
-    bit6 = str(pxl2[2] & 1)
-    bit7 = str(pxl3[0] & 1)
-    bit8 = str(pxl3[1] & 1)
-    print(bit1+bit2+bit3+bit4+bit5+bit6+bit7+bit8)
-
-decode()
+    height = file.height
+    width = file.width
+    
+    collected_bits = ""
+    
+    str_word = ""
+    for x in range(width):
+        for y in range(height):
+            r, g, b = pxls[x, y]
+            r = (r & 1)
+            collected_bits += str(r)
+            if len(collected_bits) == 8:
+                letter = chr(int(collected_bits, 2))
+                str_word += letter
+                collected_bits = ""
+                if str_word.endswith("###"):
+                    return(str_word.removesuffix("###"))
+            g = (g & 1)
+            collected_bits += str(g)
+            if len(collected_bits) == 8:
+                letter = chr(int(collected_bits, 2))
+                str_word += letter
+                collected_bits = ""
+                if str_word.endswith("###"):
+                    return(str_word.removesuffix("###"))
+            b = (b & 1)
+            collected_bits += str(b)
+            if len(collected_bits) == 8:
+                letter = chr(int(collected_bits, 2))
+                str_word += letter
+                collected_bits = ""
+                if str_word.endswith("###"):
+                    return(str_word.removesuffix("###"))
+word = decode()
+print(word)
