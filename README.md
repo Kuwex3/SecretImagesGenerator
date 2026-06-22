@@ -1,1 +1,1 @@
-# Secret Images Generator
+# Secret Images Generator.
