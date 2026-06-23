@@ -1,1 +1,2 @@
 # Secret Images Generator.
+## QuickStart
