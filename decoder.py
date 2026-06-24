@@ -38,5 +38,6 @@ def decode():
                 collected_bits = ""
                 if str_word.endswith("###"):
                     return(str_word.removesuffix("###"))
+    return str_word
 word = decode()
 print(word)
