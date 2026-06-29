@@ -51,6 +51,6 @@ def code_word(bin_word):
     file.save("new_img.png", "PNG")
     
     
-word_for_code = str(input("Enter a word which you would like to code in image (ONLY ENGLISH):"))
+word_for_code = str(input("Enter a word which you would like to insert in image (ONLY ENGLISH):"))
 bits_of_word = make_bin(word_for_code)
 code_word(bits_of_word)
