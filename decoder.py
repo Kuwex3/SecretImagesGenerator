@@ -4,40 +4,34 @@ file = Image.open("new_img.png").convert("RGB")
 
 pxls = file.load()
 
-def decode():
+def get_bits(quote_of_bits):
     height = file.height
     width = file.width
     
     collected_bits = ""
     
-    str_word = ""
     for x in range(width):
         for y in range(height):
-            r, g, b = pxls[x, y]
-            r = (r & 1)
-            collected_bits += str(r)
-            if len(collected_bits) == 8:
-                letter = chr(int(collected_bits, 2))
-                str_word += letter
-                collected_bits = ""
-                if str_word.endswith("###"):
-                    return(str_word.removesuffix("###"))
-            g = (g & 1)
-            collected_bits += str(g)
-            if len(collected_bits) == 8:
-                letter = chr(int(collected_bits, 2))
-                str_word += letter
-                collected_bits = ""
-                if str_word.endswith("###"):
-                    return(str_word.removesuffix("###"))
-            b = (b & 1)
-            collected_bits += str(b)
-            if len(collected_bits) == 8:
-                letter = chr(int(collected_bits, 2))
-                str_word += letter
-                collected_bits = ""
-                if str_word.endswith("###"):
-                    return(str_word.removesuffix("###"))
-    return str_word
+            channels = pxls[x, y]
+            for i in range(3):
+                collected_bits += str((channels[i] & 1))
+                if len(collected_bits) == quote_of_bits:
+                    return collected_bits
+                
+def decode():
+    bits_len_of_word = get_bits(32)
+    int_word_len = int(bits_len_of_word, 2)
+
+    full_bits = get_bits(32 + int_word_len)
+
+    bits_of_word = full_bits[32:]
+    word = ""
+
+    for i in range(0, len(bits_of_word), 8):
+        byte = bits_of_word[i:i+8]
+        word += chr(int(byte, 2))
+
+    return word
+
 word = decode()
 print(word)
